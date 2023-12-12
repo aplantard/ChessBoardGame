@@ -1,6 +1,6 @@
 # Ignore all files by default, but scan all directories.
 *
-!*/ChessBoardGame/**
+!*/
 
 # Do not ignore git files in the root of the repo.
 !/.git*
@@ -9,9 +9,9 @@
 !/*.uproject
 
 # Do not ignore source, config and plugins dirs.
-!/Source/**/*
-!/Config/**/*
-!/Plugins/**/*
+!/Source/**
+!/Config/**
+!/Plugins/**
 
 # Only allow .uasset and .umap files from /Content dir.
 # They're tracked by git-lfs, don't forget to track other
@@ -49,5 +49,5 @@ Session.vim
 
 # Visual Studio
 .vs
-!**/*.editorconfig
-!**/shadertoolsconfig.json
+!.editorconfig
+!shadertoolsconfig.json
