@@ -3,3 +3,10 @@
 
 #include "ChessBoardGameMode.h"
 
+void AChessBoardGameMode::InitGameState()
+{
+	Super::InitGameState();
+
+	// Set Default pawn
+	DefaultPawnClass = CustomPawn;
+}
