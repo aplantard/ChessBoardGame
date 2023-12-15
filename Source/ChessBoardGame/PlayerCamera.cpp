@@ -1,4 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 #include "PlayerCamera.h"
 
 // Sets default values
@@ -9,6 +11,21 @@ APlayerCamera::APlayerCamera()
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
 	RootComponent = PlayerCamera;
+	
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				if (!InputMapping.IsNull())
+				{
+					InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), 0);
+				}
+			}
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -30,22 +47,14 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCamera::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerCamera::MoveRight);
+	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
+	Input->BindAction(IA_Camera_Move::, ETriggerEvent::Triggered, this, &APlayerCamera::Move);
 }
 
-void APlayerCamera::MoveForward(float Value)
-{
-	FVector ActorLocation = GetActorLocation();
-	ActorLocation.X += Value;
-	SetActorLocation(ActorLocation);
-}
-
-void APlayerCamera::MoveRight(float Value)
-{
-	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Y += Value;
-	SetActorLocation(ActorLocation);
+void APlayerCamera::Move(const FInputActionValue& Value)
+{	
+	FVector ForwardVector = GetActorForwardVector();
+	AddMovementInput(ForwardVector, Value);
 }
 

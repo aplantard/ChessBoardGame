@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
+#include "EnhancedInputComponent.h"
+#include "InputMappingContext.h"
 #include "PlayerCamera.generated.h"
 
 UCLASS()
@@ -32,7 +34,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* PlayerCamera;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TSoftObjectPtr<UInputMappingContext> InputMapping;
 
-	void MoveForward(float _value);
-	void MoveRight(float _value);
+	void Move(const FInputActionValue& Value);
 };
