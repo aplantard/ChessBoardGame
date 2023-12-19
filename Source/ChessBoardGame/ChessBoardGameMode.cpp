@@ -8,5 +8,9 @@ void AChessBoardGameMode::InitGameState()
 	Super::InitGameState();
 
 	// Set Default pawn
-	DefaultPawnClass = CustomPawn;
+
+	if (DefaultPawnClass == APlayerCamera::StaticClass())
+	{
+		DefaultPawnClass = CustomPawn;
+	}
 }

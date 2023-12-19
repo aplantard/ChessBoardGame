@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "PlayerCamera.h"
+#include "EnhancedInputSubsystems.h"
+#include "GameFramework/FloatingPawnMovement.h"
+#include "EnhancedInputComponent.h"
 
 // Sets default values
 APlayerCamera::APlayerCamera()
@@ -11,7 +12,13 @@ APlayerCamera::APlayerCamera()
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
 	RootComponent = PlayerCamera;
-	
+
+	UFloatingPawnMovement* PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("floatingPawnMovement"));
+}
+
+void APlayerCamera::PawnClientRestart()
+{
+	Super::PawnClientRestart();
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -19,9 +26,11 @@ APlayerCamera::APlayerCamera()
 		{
 			if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 			{
+				InputSystem->ClearAllMappings();
+
 				if (!InputMapping.IsNull())
 				{
-					InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), 0);
+					InputSystem->AddMappingContext(InputMapping.LoadSynchronous(), 100);
 				}
 			}
 		}
@@ -47,14 +56,20 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
-	Input->BindAction(IA_Camera_Move::, ETriggerEvent::Triggered, this, &APlayerCamera::Move);
+	if (MoveInputAction)
+	{
+		Input->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerCamera::Move);
+	}
 }
 
 void APlayerCamera::Move(const FInputActionValue& Value)
 {	
+	FVector MovementVector = Value.Get<FVector>();
 	FVector ForwardVector = GetActorForwardVector();
-	AddMovementInput(ForwardVector, Value);
+	FVector RightVector = GetActorRightVector();
+	AddMovementInput(ForwardVector, MovementVector.Y * 1000.f);
+	AddMovementInput(RightVector, MovementVector.X * 1000.f);
 }
 

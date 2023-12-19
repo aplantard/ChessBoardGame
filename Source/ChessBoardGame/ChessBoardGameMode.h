@@ -19,5 +19,5 @@ public :
 	void InitGameState() override;
 
 	UPROPERTY(EditAnywhere, NoClear)
-	TSubclassOf<APlayerCamera> CustomPawn = APlayerCamera::StaticClass();
+	TSubclassOf<APlayerCamera> CustomPawn;
 };
