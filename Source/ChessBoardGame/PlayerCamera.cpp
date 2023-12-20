@@ -72,6 +72,11 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	{
 		Input->BindAction(MoveInputAction.LoadSynchronous(), ETriggerEvent::Triggered, this, &APlayerCamera::Move);
 	}
+
+	if (ZoomInputAction)
+	{
+		Input->BindAction(ZoomInputAction.LoadSynchronous(), ETriggerEvent::Triggered, this, &APlayerCamera::Zoom);
+	}
 }
 
 void APlayerCamera::Move(const FInputActionValue& Value)
@@ -86,4 +91,13 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 	AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
 	AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
 }
+
+void APlayerCamera::Zoom(const FInputActionValue& Value)
+{
+	float ZoomValue = Value.Get<float>();
+
+	SpringArmComponent->TargetArmLength = SpringArmComponent->TargetArmLength + (ZoomValue * CameraZoomSpeed);
+	
+}
+
 

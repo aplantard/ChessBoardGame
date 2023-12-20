@@ -49,11 +49,18 @@ private:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	float CameraMovementSpeed = 1000.f;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float CameraZoomSpeed = 15.f;
+
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UInputMappingContext> InputMapping;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UInputAction> MoveInputAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TSoftObjectPtr<UInputAction> ZoomInputAction;
+
 	void Move(const FInputActionValue& Value);
+	void Zoom(const FInputActionValue& Value);
 };
