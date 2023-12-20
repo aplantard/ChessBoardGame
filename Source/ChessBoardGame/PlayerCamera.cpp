@@ -88,6 +88,12 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 	FVector UpDownVector = FVector(ForwardVector.X, ForwardVector.Y, 0);
 	FVector RightLeftVector = FVector(RightVector.X, RightVector.Y, 0);
 
+	double MouseX = 0;
+	double MouseY = 0;
+	Cast<APlayerController>(GetController())->GetMousePosition(MouseX, MouseY);
+
+	if ()
+
 	AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
 	AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
 }
