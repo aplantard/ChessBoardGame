@@ -2,7 +2,11 @@
 #include "PlayerCamera.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
+
 
 // Sets default values
 APlayerCamera::APlayerCamera()
@@ -10,10 +14,13 @@ APlayerCamera::APlayerCamera()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComponent"));
 	RootComponent = PlayerCamera;
 
-	UFloatingPawnMovement* PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("floatingPawnMovement"));
+	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
+	PlayerCamera->SetupAttachment(SpringArmComponent);
+
+	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("floatingPawnMovement"));
 }
 
 void APlayerCamera::PawnClientRestart()
@@ -60,7 +67,7 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	if (MoveInputAction)
 	{
-		Input->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerCamera::Move);
+		Input->BindAction(MoveInputAction.LoadSynchronous(), ETriggerEvent::Triggered, this, &APlayerCamera::Move);
 	}
 }
 
@@ -69,7 +76,11 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 	FVector MovementVector = Value.Get<FVector>();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector RightVector = GetActorRightVector();
-	AddMovementInput(ForwardVector, MovementVector.Y * 1000.f);
-	AddMovementInput(RightVector, MovementVector.X * 1000.f);
+
+	FVector UpDownVector = FVector(ForwardVector.X, ForwardVector.Y, 0);
+	FVector RightLeftVector = FVector(RightVector.X, RightVector.Y, 0);
+
+	AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
+	AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
 }
 

@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Camera/CameraComponent.h"
-#include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
 #include "PlayerCamera.generated.h"
+
+class USpringArmComponent;
+class UFloatingPawnMovement;
+class UInputMappingContext;
+class UCameraComponent;
+class UInputAction;
+struct FInputActionValue;
 
 UCLASS()
 class CHESSBOARDGAME_API APlayerCamera : public APawn
@@ -33,14 +37,23 @@ public:
 	virtual void PawnClientRestart() override;
 
 private:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess="true"))
 	UCameraComponent* PlayerCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UFloatingPawnMovement* FloatingPawnMovement;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float CameraMovementSpeed = 1000.f;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UInputMappingContext> InputMapping;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* MoveInputAction;
+	TSoftObjectPtr<UInputAction> MoveInputAction;
 
 	void Move(const FInputActionValue& Value);
 };
