@@ -15,6 +15,7 @@ APlayerCamera::APlayerCamera()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComponent"));
+	SpringArmComponent->bDoCollisionTest = false;
 	RootComponent = PlayerCamera;
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
@@ -41,6 +42,8 @@ void APlayerCamera::PawnClientRestart()
 				}
 			}
 		}
+
+		PlayerController->bShowMouseCursor = true;
 	}
 }
 
