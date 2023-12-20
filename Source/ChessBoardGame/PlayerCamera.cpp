@@ -88,11 +88,19 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 	FVector UpDownVector = FVector(ForwardVector.X, ForwardVector.Y, 0);
 	FVector RightLeftVector = FVector(RightVector.X, RightVector.Y, 0);
 
-	double MouseX = 0;
-	double MouseY = 0;
-	Cast<APlayerController>(GetController())->GetMousePosition(MouseX, MouseY);
+	int32 ViewportSizeX = 0;
+	int32 ViewportSizeY = 0;
+	Cast<APlayerController>(GetController())->GetViewportSize(ViewportSizeX, ViewportSizeY);
 
-	if ()
+	if (MovementVector.X/ViewportSizeX > 0.98 || MovementVector.X/ViewportSizeX < 0.02)
+	{
+		AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
+	}
+
+	if (MovementVector.Y / ViewportSizeY > 0.98 || MovementVector.Y / ViewportSizeY < 0.02)
+	{
+		AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
+	}
 
 	AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
 	AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
