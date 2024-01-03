@@ -24,9 +24,22 @@ APlayerCamera::APlayerCamera()
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("floatingPawnMovement"));
 }
 
-void APlayerCamera::PawnClientRestart()
+// Called when the game starts or when spawned
+void APlayerCamera::BeginPlay()
 {
-	Super::PawnClientRestart();
+	Super::BeginPlay();
+}
+
+// Called every frame
+void APlayerCamera::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+	
+// Called to bind functionality to input
+void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -45,26 +58,6 @@ void APlayerCamera::PawnClientRestart()
 
 		PlayerController->bShowMouseCursor = true;
 	}
-}
-
-// Called when the game starts or when spawned
-void APlayerCamera::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void APlayerCamera::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-	
-// Called to bind functionality to input
-void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
@@ -87,20 +80,6 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 
 	FVector UpDownVector = FVector(ForwardVector.X, ForwardVector.Y, 0);
 	FVector RightLeftVector = FVector(RightVector.X, RightVector.Y, 0);
-
-	int32 ViewportSizeX = 0;
-	int32 ViewportSizeY = 0;
-	Cast<APlayerController>(GetController())->GetViewportSize(ViewportSizeX, ViewportSizeY);
-
-	if (MovementVector.X/ViewportSizeX > 0.98 || MovementVector.X/ViewportSizeX < 0.02)
-	{
-		AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
-	}
-
-	if (MovementVector.Y / ViewportSizeY > 0.98 || MovementVector.Y / ViewportSizeY < 0.02)
-	{
-		AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
-	}
 
 	AddMovementInput(UpDownVector, MovementVector.Y * CameraMovementSpeed);
 	AddMovementInput(RightLeftVector, MovementVector.X * CameraMovementSpeed);
