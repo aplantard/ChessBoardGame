@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "InputTriggers.h"
-#include "MouseOnScreenEdge.generated.h"
+#include "InputTriggerMouseOnScreenEdge.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CHESSBOARDGAME_API UMouseOnScreenEdge : public UInputTrigger
+class CHESSBOARDGAME_API UInputTriggerMouseOnScreenEdge : public UInputTrigger
 {
 	GENERATED_BODY()
 	
