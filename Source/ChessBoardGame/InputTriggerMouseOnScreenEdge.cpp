@@ -4,6 +4,12 @@
 #include "InputTriggerMouseOnScreenEdge.h"
 #include "Engine/World.h"
 
+// Sets default values
+UInputTriggerMouseOnScreenEdge::UInputTriggerMouseOnScreenEdge()
+{
+	UInputTrigger::bShouldAlwaysTick = true;
+}
+
 ETriggerState UInputTriggerMouseOnScreenEdge::UpdateState_Implementation(const UEnhancedPlayerInput* PlayerInput, FInputActionValue ModifiedValue, float DeltaTime)
 {
 	if (IsValid(GEngine) && IsValid(GEngine->GameViewport))
