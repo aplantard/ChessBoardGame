@@ -70,6 +70,11 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	{
 		Input->BindAction(ZoomInputAction.LoadSynchronous(), ETriggerEvent::Triggered, this, &APlayerCamera::Zoom);
 	}
+
+	if (RotateInputAction)
+	{
+		Input->BindAction(RotateInputAction.LoadSynchronous(), ETriggerEvent::Triggered, this, &APlayerCamera::Rotate);
+	}
 }
 
 void APlayerCamera::Move(const FInputActionValue& Value)
@@ -91,6 +96,12 @@ void APlayerCamera::Zoom(const FInputActionValue& Value)
 
 	SpringArmComponent->TargetArmLength = SpringArmComponent->TargetArmLength + (ZoomValue * CameraZoomSpeed);
 	
+}
+
+void APlayerCamera::Rotate(const FInputActionValue& Value)
+{
+	float RotateValue = Value.Get<float>();
+	AddControllerYawInput(RotateValue * 100);
 }
 
 

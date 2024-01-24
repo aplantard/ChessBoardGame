@@ -59,6 +59,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UInputAction> ZoomInputAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TSoftObjectPtr<UInputAction> RotateInputAction;
+
 	void Move(const FInputActionValue& Value);
 	void Zoom(const FInputActionValue& Value);
+	void Rotate(const FInputActionValue& Value);
 };

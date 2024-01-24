@@ -5,6 +5,8 @@
 
 FInputActionValue UInputModifierMouseOnEdge::ModifyRaw_Implementation(const UEnhancedPlayerInput* PlayerInput, FInputActionValue CurrentValue, float DeltaTime)
 {
+	Super::ModifyRaw_Implementation(PlayerInput, CurrentValue, DeltaTime);
+
 	if (IsValid(GEngine) && IsValid(GEngine->GameViewport))
 	{
 		FViewport* CurrentViewPort = GEngine->GameViewport->Viewport;
