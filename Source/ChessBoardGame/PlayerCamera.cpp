@@ -16,6 +16,9 @@ APlayerCamera::APlayerCamera()
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComponent"));
 	SpringArmComponent->bDoCollisionTest = false;
+	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->bInheritPitch = false;
+	SpringArmComponent->bInheritRoll = false;
 	RootComponent = PlayerCamera;
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("mainCamera"));
@@ -80,8 +83,9 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void APlayerCamera::Move(const FInputActionValue& Value)
 {	
 	FVector MovementVector = Value.Get<FVector>();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector RightVector = GetActorRightVector();
+
+	FVector ForwardVector = PlayerCamera->GetForwardVector();
+	FVector RightVector = PlayerCamera->GetRightVector();
 
 	FVector UpDownVector = FVector(ForwardVector.X, ForwardVector.Y, 0);
 	FVector RightLeftVector = FVector(RightVector.X, RightVector.Y, 0);
@@ -101,7 +105,7 @@ void APlayerCamera::Zoom(const FInputActionValue& Value)
 void APlayerCamera::Rotate(const FInputActionValue& Value)
 {
 	float RotateValue = Value.Get<float>();
-	AddControllerYawInput(RotateValue * 100);
+	AddControllerYawInput(RotateValue * CameraRotationSpeed);
 }
 
 
