@@ -3,13 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "Grid.generated.h"
 
 /**
  * 
  */
 
 UENUM(BlueprintType)
-enum CellType
+enum ECellType
 {
 	Square UMETA(DisplayName = "Square"),
 	Hexagon UMETA(DisplayName = "Hexagon"),
@@ -17,41 +19,38 @@ enum CellType
 };
 
 
-struct Cell
+struct FCell
 {
 	FVector Position = FVector();
 
-	FRotator Orientation = FRotator();
+	FCell() {};
 
-
-
-	Cell();
-
-	Cell(FVector Position)
+	FCell(FVector Position);
 
 };
 
 
 UCLASS()
-class CHESSBOARDGAME_API Grid : public AActor
+class CHESSBOARDGAME_API AGrid : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	Grid();
-	~Grid();
+	AGrid();
+	~AGrid();
+
+	FCell (*Grid) = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	unsigned int SizeX = 0;
+	int SizeX = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	unsigned int SizeX = 0;
+	int SizeY = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	unsigned int CellSize= 0;
+	int CellSize= 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	CellType Type = CellType::Square;
+	TEnumAsByte<ECellType> Type = ECellType::Square;
 
-	void newGrid()
 };
