@@ -25,7 +25,7 @@ struct FCell
 
 	FCell() {};
 
-	FCell(FVector Position);
+	explicit FCell(FVector Position) : Position(Position) {};
 
 };
 
@@ -39,7 +39,7 @@ public:
 	AGrid();
 	~AGrid();
 
-	FCell (*Grid) = nullptr;
+	TArray<TArray<FCell>> Grid;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int SizeX = 0;
@@ -52,5 +52,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<ECellType> Type = ECellType::Square;
+
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 };
